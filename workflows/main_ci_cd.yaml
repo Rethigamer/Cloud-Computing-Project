@@ -1,0 +1,31 @@
+name: CI/CD Pipeline
+on: [push] # Trigger on every code push
+
+jobs:
+  provision_infra:
+    runs-on: ubuntu-latest
+    steps:
+    # 1. Checkout Code
+    - uses: actions/checkout@v4
+    
+    # 2. Azure Login using Service Principal (SPN) Secret
+    - uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }} # Required for all Azure commands
+
+    # 3. Initialize & Apply Terraform
+    - name: Terraform Init
+      run: terraform init
+      working-directory: infra/
+      
+    - name: Terraform Apply
+      run: terraform apply -auto-approve
+      working-directory: infra/
+      
+  build_and_deploy:
+    needs: provision_infra # Run only after infrastructure is ready
+    runs-on: ubuntu-latest
+    steps:
+    # ... Build & Push Docker image steps here (using Docker login with ACR token)
+    # ... Configure AKS credentials using 'az aks get-credentials'
+    # ... Run 'kubectl apply -f deployment.yaml' for final deployment
