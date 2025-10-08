@@ -1,89 +1,220 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Mental Health Chatbot</title>
-    <style>
-        /* Simple CSS for a chat layout */
-        body { font-family: sans-serif; margin: 0; padding: 0; background-color: #f4f4f9; }
-        .chat-container { width: 80%; max-width: 700px; margin: 50px auto; background-color: white; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: flex; flex-direction: column; min-height: 500px; }
-        .messages { flex-grow: 1; padding: 20px; overflow-y: auto; border-bottom: 1px solid #eee; }
-        .message { margin-bottom: 15px; padding: 8px 12px; border-radius: 18px; max-width: 70%; }
-        .user-message { background-color: #007bff; color: white; margin-left: auto; text-align: right; }
-        .bot-message { background-color: #e2e2e2; color: #333; margin-right: auto; text-align: left; }
-        .input-area { display: flex; padding: 15px; border-top: 1px solid #ddd; }
-        .input-area input { flex-grow: 1; padding: 10px; border: 1px solid #ccc; border-radius: 20px 0 0 20px; outline: none; }
-        .input-area button { padding: 10px 20px; border: none; background-color: #28a745; color: white; border-radius: 0 20px 20px 0; cursor: pointer; }
-    </style>
+  <meta charset="UTF-8">
+  <title>Mental Health Chatbot</title>
+  <style>
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #d4fc79, #96e6a1); /* soft green tones */
+      background: linear-gradient(135deg, #c3e0e5 0%, #a1c4fd 50%, #c2e9fb 100%);
+      background-attachment: fixed;
+      animation: gradientShift 12s ease infinite;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .chat-container {
+      width: 85%;
+      max-width: 750px;
+      background-color: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(12px);
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      animation: fadeIn 0.8s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    
+    .chat-header {
+      background: linear-gradient(90deg, #43cea2, #185a9d);
+      color: white;
+      text-align: center;
+      padding: 20px;
+      font-size: 1.3rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    
+    .messages {
+      flex-grow: 1;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      scrollbar-width: thin;
+      scrollbar-color: #b3b3b3 transparent;
+      background: #f7f9fc;
+    }
+
+    .messages::-webkit-scrollbar {
+      width: 6px;
+    }
+    .messages::-webkit-scrollbar-thumb {
+      background-color: #b3b3b3;
+      border-radius: 3px;
+    }
+
+    .message {
+      margin-bottom: 15px;
+      padding: 12px 18px;
+      border-radius: 20px;
+      max-width: 70%;
+      line-height: 1.5;
+      animation: messagePop 0.3s ease;
+      word-wrap: break-word;
+    }
+
+    @keyframes messagePop {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .user-message {
+      background: linear-gradient(90deg, #00c6ff, #0072ff);
+      color: white;
+      margin-left: auto;
+      border-bottom-right-radius: 5px;
+      box-shadow: 0 3px 8px rgba(0,114,255,0.3);
+    }
+
+    .bot-message {
+      background-color: #e9f5f2;
+      color: #333;
+      margin-right: auto;
+      border-bottom-left-radius: 5px;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    }
+
+    
+    .input-area {
+      display: flex;
+      padding: 15px;
+      border-top: 1px solid #eee;
+      background-color: #fafafa;
+    }
+
+    .input-area input {
+      flex-grow: 1;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 30px;
+      outline: none;
+      font-size: 1rem;
+      background: #f0f0f0;
+      transition: 0.3s;
+    }
+
+    .input-area input:focus {
+      background: #fff;
+      box-shadow: 0 0 8px rgba(67,206,162,0.4);
+    }
+
+    .input-area button {
+      padding: 12px 22px;
+      margin-left: 10px;
+      border: none;
+      background: linear-gradient(90deg, #43cea2, #185a9d);
+      color: white;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      transition: 0.3s;
+    }
+
+    .input-area button:hover {
+      opacity: 0.9;
+      transform: scale(1.03);
+    }
+
+    
+    @media (max-width: 600px) {
+      .chat-container {
+        width: 95%;
+        height: 90vh;
+      }
+      .chat-header {
+        font-size: 1.1rem;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="chat-container">
-        <div class="messages" id="messages">
-            <div class="message bot-message">Hello! I'm here to listen. How can I help you today?</div>
-        </div>
-        <div class="input-area">
-            <input type="text" id="user-input" placeholder="Type your message here...">
-            <button onclick="sendMessage()">Send</button>
-        </div>
+  <div class="chat-container">
+    <div class="chat-header">🌿 MindEase — Your Mental Health Companion</div>
+    <div class="messages" id="messages">
+      <div class="message bot-message">Hello! I’m here to listen. How are you feeling today?</div>
     </div>
-    <script>
-        const chatApiUrl = "/api/chat";
-        const messagesDiv = document.getElementById("messages");
-        const userInput = document.getElementById("user-input");
+    <div class="input-area">
+      <input type="text" id="user-input" placeholder="Type your thoughts here...">
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
 
-        // Allows sending the message by pressing Enter
-        userInput.addEventListener("keypress", function(event) {
-            if (event.key === "Enter") {
-                sendMessage();
-            }
+  <script>
+    const chatApiUrl = "/api/chat";
+    const messagesDiv = document.getElementById("messages");
+    const userInput = document.getElementById("user-input");
+
+    userInput.addEventListener("keypress", function(event) {
+      if (event.key === "Enter") sendMessage();
+    });
+
+    function addMessage(text, sender) {
+      const messageElement = document.createElement("div");
+      messageElement.classList.add("message", sender === "user" ? "user-message" : "bot-message");
+      messageElement.textContent = text;
+      messagesDiv.appendChild(messageElement);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    async function sendMessage() {
+      const message = userInput.value.trim();
+      if (!message) return;
+
+      addMessage(message, "user");
+      userInput.value = "";
+
+      try {
+        const response = await fetch(chatApiUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message })
         });
 
-        function addMessage(text, sender) {
-            const messageElement = document.createElement("div");
-            messageElement.classList.add("message", sender === 'user' ? "user-message" : "bot-message");
-            messageElement.textContent = text;
-            messagesDiv.appendChild(messageElement);
-            // Scroll to the latest message
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || "Server error");
         }
 
-        async function sendMessage() {
-            const message = userInput.value.trim();
-            if (!message) return;
-
-            // 1. Display user message and clear input
-            addMessage(message, 'user');
-            userInput.value = '';
-
-            try {
-                // 2. Make the POST request using Fetch API
-                const response = await fetch(chatApiUrl, {
-                    method: 'POST',
-                    headers: {
-                        // Crucial header: tells Flask to expect JSON
-                        'Content-Type': 'application/json' 
-                    },
-                    // Convert JS object to JSON string
-                    body: JSON.stringify({ message: message }) 
-                });
-
-                // Check for HTTP errors (e.g., 500 Internal Server Error)
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(`API Error: ${response.status} - ${errorData.error || response.statusText}`);
-                }
-
-                // 3. Process the JSON response
-                const data = await response.json();
-                
-                // 4. Display the bot's reply
-                addMessage(data.reply, 'bot');
-
-            } catch (error) {
-                console.error("Fetch failed:", error);
-                addMessage(`Error communicating with the server: ${error.message}`, 'bot');
-            }
-        }
-    </script>
+        const data = await response.json();
+        addMessage(data.reply, "bot");
+      } catch (error) {
+        console.error(error);
+        addMessage("I'm having trouble connecting right now. Please try again later 💬", "bot");
+      }
+    }
+  </script>
 </body>
 </html>

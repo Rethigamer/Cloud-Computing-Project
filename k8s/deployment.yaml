@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chatbot-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: chatbot-app
+  template:
+    metadata:
+      labels:
+        app: chatbot-app
+    spec:
+      containers:
+      - name: chatbot-container
+        # Replace <ACR_LOGIN_SERVER> with the actual login server 
+        # (e.g., rethischatbotreg.azurecr.io) that your admin creates.
+        image: <ACR_LOGIN_SERVER>/mh-chatbot:v1
+        ports:
+        - containerPort: 5000
+        env:
+        # Pass Azure AI Language credentials as Kubernetes secrets in real life, 
+        # but for demonstration, referencing them here is sufficient.
+        - name: AZURE_LANGUAGE_KEY
+          value: "YOUR_KEY_PLACEHOLDER"
+        - name: AZURE_LANGUAGE_ENDPOINT
+          value: "YOUR_ENDPOINT_PLACEHOLDER"
